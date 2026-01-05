@@ -4,10 +4,8 @@ require_relative '../expressions/dependency'
 
 module Low
   class DependencyFactory
-    include LowType
-
     class << self
-      def parse(dependencies = Array)
+      def parse(dependencies)
         class_dependencies = []
 
         dependencies.each do |dependency|
