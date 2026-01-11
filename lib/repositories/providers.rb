@@ -3,6 +3,7 @@
 require_relative '../models/provider'
 
 module Low
+  # Private API. Public methods exposed via LowDependency.
   class Providers
     class << self
       def provide(key:, &block)
@@ -16,6 +17,11 @@ module Low
 
       def find(provider_key)
         providers[provider_key]
+      end
+
+      # Usage: def initialize(dependency: Low::Providers[:dependency])
+      def [](provider_key)
+        providers[provider_key].result
       end
 
       def all
