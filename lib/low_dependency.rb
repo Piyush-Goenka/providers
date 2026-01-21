@@ -12,7 +12,7 @@ class LowDependency
       Low::Providers.provide(key:, &block)
     end
 
-    # "include LowDependency[:dependency]"
+    # Usage: "include LowDependency[:dependency]"
     def [](*dependencies)
       class_dependencies = Low::DependencyFactory.parse([*dependencies])
 
@@ -59,7 +59,7 @@ class LowDependency
       end
     end
 
-    def provider_from_namespace(namespace)
+    def var_name_via_namespace(namespace)
       return namespace.split('.').last if namespace.is_a?(String)
 
       namespace
