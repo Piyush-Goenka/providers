@@ -77,12 +77,19 @@ Now you get to have your classical dependency cake 🍰 and eat it too with an a
 
 ### Dependency Expression
 
-The `def(dependency: Dependency)` syntax is an [Expression](https://github.com/raindeer-rb/expressions); an object composed via a query builder like interface. A Dependency Expression defines the name of the local variable, as well as the name of the provider that will inject the dependency into your code.
+The `def(dependency: Dependency)` syntax is an [Expression](https://github.com/raindeer-rb/expressions); an object composed via a query builder like interface.  
+A Dependency Expression defines the name of the local variable, as well as the name of the provider that will inject the dependency into your code.
 
 To define a provider with a different name to that of the local variable do:
 ```ruby
-def initialize(dependency_one: Dependency | :provider_one, dependency_two: Dependency | 'billing.provider_two')
+def initialize(dependency_one: Dependency | :provider_one)
   dependency_one # => Dependency injected from :provider_one.
+end
+```
+
+For providers with string keys do:
+```ruby
+def initialize(dependency_two: Dependency | 'billing.provider_two')
   dependency_two # => Dependency injected from 'billing.provider_two'.
 end
 ```
