@@ -35,11 +35,11 @@ class LowDependency
 
             def initialize
               self.class.low_dependencies.each do |dependency|
-                provider = Low::Providers.find(dependency.key)
-                raise StandardError, "Provider #{dependency.key} not found" if provider.nil?
+                provider = Low::Providers.find(dependency.provider_key)
+                raise StandardError, "Provider #{dependency.provider_key} not found" if provider.nil?
 
-                var = LowDependency.provider_from_namespace(dependency.var)
-                instance_variable_set("@#{var}", provider.result)
+                var_name = LowDependency.var_name_via_namespace(dependency.var_name)
+                instance_variable_set("@#{var_name}", provider.result)
               end
             end
 
@@ -51,10 +51,10 @@ class LowDependency
 
     def define_readers(dependencies, klass)
       dependencies.each do |dependency|
-        var = provider_from_namespace(dependency.var)
+        var_name = var_name_via_namespace(dependency.var_name)
 
-        klass.define_method(var) do
-          instance_variable_get("@#{var}")
+        klass.define_method(var_name) do
+          instance_variable_get("@#{var_name}")
         end
       end
     end

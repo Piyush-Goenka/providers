@@ -11,13 +11,13 @@ module Low
         dependencies.each do |dependency|
           case dependency
           when Hash
-            key = dependency.keys.first
-            dependency = dependency[key]
+            provider_key = dependency.keys.first
+            dependency = dependency[provider_key]
           else
-            key = dependency
+            provider_key = dependency
           end
 
-          class_dependencies << (Dependency.new(var: dependency) | key)
+          class_dependencies << (Dependency.new(var_name: dependency) | provider_key)
         end
 
         class_dependencies
