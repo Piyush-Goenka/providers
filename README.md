@@ -13,12 +13,12 @@ class MyClass
   include LowType
 
   def initialize(my_dependency: Dependency)
-    @my_dependency = my_dependency # => The dependency is injected.
+    @my_dependency = my_dependency # => "my_dependency" is injected.
   end
 end
 ```
 
-The above example requires [LowType](https://github.com/low-rb/low_type) in order to use the `def(dependency: Dependency)` syntax.
+ℹ️ The above example requires [LowType](https://github.com/low-rb/low_type) in order to use the `def(dependency: Dependency)` syntax.
 
 Or you may like to use the more traditional `include` syntax:
 
@@ -27,7 +27,7 @@ class MyClass
   include LowDependency[:my_dependency]
 
   def my_method
-    @my_dependency # => The dependency is injected.
+    @my_dependency # => "@my_dependency" is injected.
   end
 end
 ```
@@ -120,7 +120,7 @@ class MyClass
 end
 ```
 
-ℹ️ String keys with a namespace such as `'billing.provider_two'` will have their dependency injected without the namespace; the variable will just be called `provider_two`.
+ℹ️ Provider keys with a namespace such as `'billing.provider_two'` will have their dependency injected without the namespace; the variable will just be `@provider_two`.
 
 Separating many dependencies on multiple lines:
 ```ruby
