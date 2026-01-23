@@ -59,7 +59,7 @@ LowDependency.provide(:provider_dependency) do
   ProviderDependency.new
 end
 
-# Define both an "provider" and a "classical" dependency:
+# Define both a "provider" and a "classical" dependency:
 class MyClass
   include LowType
 
