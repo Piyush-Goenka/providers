@@ -4,9 +4,13 @@
 
 Automatic Dependency Injection where you get to see and keep control of the constructor.
 
-## Injection
+## Injectors
 
-Inject a dependency:
+Providers provides 3 ways to inject a dependency.
+
+### 1. Dependency Expression
+
+Place a `Dependency` expression as the default value of your dependency:
 
 ```ruby
 class MyClass
@@ -18,7 +22,9 @@ class MyClass
 end
 ```
 
-ℹ️ The above example requires [LowType](https://github.com/raindeer-rb/low_type) in order to use the `def(dependency: Dependency)` syntax.
+ℹ️ This method requires [LowType](https://github.com/low-rb/lowtype) in order to use the `def(dependency: Dependency)` syntax.
+
+### 2. Constructor Override
 
 Or you may like to use the more traditional `include` syntax:
 
@@ -34,18 +40,30 @@ end
 
 This method hides and creates the constructor on your behalf.
 
+### 3. Providers Collection
+
+```ruby
+# Symbol key.
+my_dependency = Providers[:my_provider]
+
+# String key with namespace.
+my_dependency = Providers['namespace.my_provider']
+```
+
+ℹ️ Use this method only when necessary, it's the least "in the spirit" of dependency injection and takes more lines of code to stub in a test.
+
 ## Providers
 
 Provide the dependency with:
 ```ruby
-Dependencies.provide(:my_dependency) do
+Providers.define(:my_dependency) do
   MyDependency.new
 end
 ```
 
 Namespaced string keys are fine too:
 ```ruby
-Dependencies.provide('billing.payment_provider') do
+Providers.define('billing.payment_provider') do
   PaymentProvider.new
 end
 ```
@@ -55,7 +73,7 @@ end
 Providers lets you do something special; mix "classical" dependency injection (passing an arg to `new`) with "provider" style dependency injection (populating an arg via a framework):
 
 ```ruby
-Dependencies.provide(:provider_dependency) do
+Providers.define(:provider_dependency) do
   ProviderDependency.new
 end
 
@@ -69,11 +87,11 @@ class MyClass
   end
 end
 
-# Now bring it all together by calling:
+# Then bring it all together with:
 MyClass.new(classical_dependency: ClassicalDependency.new)
 ```
 
-The `provider_dependency` argument will automatically be injected by Providers!
+The `provider_dependency` argument will automatically be injected from the `provider_dependency` provider by Providers!
 
 Now you get to have your classical dependency cake 🍰 and eat it too with an automatically injected dependency spoon 🥣
 
@@ -83,7 +101,7 @@ Now you get to have your classical dependency cake 🍰 and eat it too with an a
 
 A Dependency Expression defines the dependency to be injected, the provider that will inject it and the name of the local variable that it will be made available as.
 
-The `def(dependency: Dependency)` syntax is an [Expression](https://github.com/raindeer-rb/expressions); an object composed via a query builder like interface. It follows the same logically consistent rules as other expressions in the Expressions API.
+The `def(dependency: Dependency)` syntax is an [Expression](https://github.com/raindeer-rb/expressions); an object composed via a query builder like interface.
 
 To define a provider with a different name to that of the local variable do:
 ```ruby
@@ -99,7 +117,7 @@ def initialize(dependency_two: Dependency | 'billing.provider_two')
 end
 ```
 
-ℹ️ The value after the pipe `|` becomes the provider key. When the provider key is omitted then the name of the positional/keyword argument is substituted as the provider key instead.
+ℹ️ The value after the pipe `|` becomes the provider key. When the provider key is omitted then the name of the positional/keyword argument becomes the provider key instead.
 
 ### Traditional Dependency
 
@@ -112,7 +130,7 @@ class MyClass
 end
 ```
 
-Dependencies with differing local variable/provider keys:
+Dependencies with differing variable/dependency and provider keys:
 ```ruby
 class MyClass
   include Dependencies[dependency_one: :provider_one, dependency_two: 'billing.provider_two']
@@ -120,9 +138,9 @@ class MyClass
 end
 ```
 
-ℹ️ Provider keys with a namespace such as `'billing.provider_two'` will have their dependency injected without the namespace; the variable will just be `@provider_two`.
+ℹ️ Provider keys with a namespace such as `'billing.provider_two'` will have their dependency injected without the namespace; the instance variable will just be `@provider_two`.
 
-Separating many dependencies on multiple lines:
+Separating dependencies on multiple lines:
 ```ruby
 class MyClass
   include Dependencies[
