@@ -8,8 +8,7 @@ gemspec
 group :development do
   gem 'expressions', path: '../expressions'
 
-  gem 'pry'
-  gem 'pry-nav'
+  gem 'irb'
   gem 'rack'
   gem 'rack-test'
   gem 'rake', '~> 13.0'
