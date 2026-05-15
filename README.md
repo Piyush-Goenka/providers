@@ -16,8 +16,8 @@ Place a `Dependency` expression as the default value of your dependency:
 class MyClass
   include LowType
 
-  def initialize(my_dependency: Dependency)
-    @my_dependency = my_dependency # => "my_dependency" is injected.
+  def initialize(logger: Dependency)
+    @logger = logger # => "logger" is injected.
   end
 end
 ```
@@ -30,10 +30,10 @@ Or you may like to use the more traditional `include` syntax:
 
 ```ruby
 class MyClass
-  include Dependencies[:my_dependency]
+  include Dependencies[:logger]
 
   def my_method
-    @my_dependency # => "@my_dependency" is injected.
+    @logger # => "@logger" is injected.
   end
 end
 ```
@@ -43,7 +43,7 @@ This method hides and creates the constructor on your behalf.
 ### 3. Providers Hash
 
 ```ruby
-my_dependency = Providers[:my_provider]
+logger = Providers[:my_provider]
 ```
 
 ℹ️ Use this method only when necessary, it's the least "in the spirit" of dependency injection and takes more lines of code to stub in a test.
@@ -52,8 +52,8 @@ my_dependency = Providers[:my_provider]
 
 Provide the dependency with:
 ```ruby
-Providers.define(:my_dependency) do
-  MyDependency.new
+Providers.define(:logger) do
+  Logger.new
 end
 ```
 
@@ -168,7 +168,7 @@ end
 ### Providers Hash
 
 ```ruby
-my_dependency = Providers['namespace.my_provider']
+logger = Providers['namespace.my_provider']
 ```
 
 Multiple dependencies:
@@ -178,7 +178,7 @@ dependency_one, dependency_two = Providers[:provider_one, 'provider_two']
 
 ## Examples
 
-### Boot File
+### Boot file
 
 A boot sequence taken from the boot file of [Raindeer](https://github.com/raindeer-rb/raindeer):
 ```ruby
